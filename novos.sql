@@ -6,7 +6,9 @@ ADD COLUMN fabricante varchar(50);
 
 CREATE TABLE tb_estoque (
     id serial PRIMARY KEY,
-    produto_id int REFERENCES tb_produto(id),
+    produto_id bigint REFERENCES tb_produto(id),
     quantidade int NOT NULL DEFAULT 0
 );
 
+ALTER TABLE tb_estoque
+ADD CHECK (quantidade >= 0);
