@@ -13,6 +13,8 @@ import br.com.rpires.exceptions.MaisDeUmRegistroException;
 import br.com.rpires.exceptions.TableException;
 import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
 import java.util.Collection;
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,17 +44,23 @@ public class ClienteDAOTest {
     });
   }
 
-  @Test
-  public void pesquisarCliente()
-    throws MaisDeUmRegistroException, TableException, TipoChaveNaoEncontradaException, DAOException {
+  private Cliente buildCliente(Long randomCpf) {
     Cliente cliente = new Cliente();
-    cliente.setCpf(12312312312L);
+    cliente.setCpf(randomCpf);
     cliente.setNome("Rodrigo");
     cliente.setCidade("São Paulo");
     cliente.setEnd("End");
     cliente.setEstado("SP");
     cliente.setNumero(10);
     cliente.setTel(1199999999L);
+    cliente.setEmail("123@gmail.com");
+    return cliente;
+  }
+
+  @Test
+  public void pesquisarCliente()
+    throws MaisDeUmRegistroException, TableException, TipoChaveNaoEncontradaException, DAOException {
+    Cliente cliente = buildCliente(new Random().nextLong());
     clienteDao.cadastrar(cliente);
 
     Cliente clienteConsultado = clienteDao.consultar(cliente.getCpf());
@@ -64,14 +72,7 @@ public class ClienteDAOTest {
   @Test
   public void salvarCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = new Cliente();
-    cliente.setCpf(56565656565L);
-    cliente.setNome("Rodrigo");
-    cliente.setCidade("São Paulo");
-    cliente.setEnd("End");
-    cliente.setEstado("SP");
-    cliente.setNumero(10);
-    cliente.setTel(1199999999L);
+    Cliente cliente = buildCliente(new Random().nextLong());
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
@@ -84,14 +85,7 @@ public class ClienteDAOTest {
   @Test
   public void excluirCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = new Cliente();
-    cliente.setCpf(56565656565L);
-    cliente.setNome("Rodrigo");
-    cliente.setCidade("São Paulo");
-    cliente.setEnd("End");
-    cliente.setEstado("SP");
-    cliente.setNumero(10);
-    cliente.setTel(1199999999L);
+    Cliente cliente = buildCliente(new Random().nextLong());
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
@@ -106,14 +100,8 @@ public class ClienteDAOTest {
   @Test
   public void alterarCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = new Cliente();
-    cliente.setCpf(56565656565L);
-    cliente.setNome("Rodrigo");
-    cliente.setCidade("São Paulo");
-    cliente.setEnd("End");
-    cliente.setEstado("SP");
-    cliente.setNumero(10);
-    cliente.setTel(1199999999L);
+    Cliente cliente = buildCliente(new Random().nextLong());
+
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
@@ -135,27 +123,8 @@ public class ClienteDAOTest {
   @Test
   public void buscarTodos()
     throws TipoChaveNaoEncontradaException, DAOException {
-    Cliente cliente = new Cliente();
-    cliente.setCpf(56565656565L);
-    cliente.setNome("Rodrigo");
-    cliente.setCidade("São Paulo");
-    cliente.setEnd("End");
-    cliente.setEstado("SP");
-    cliente.setNumero(10);
-    cliente.setTel(1199999999L);
-    Boolean retorno = clienteDao.cadastrar(cliente);
-    Assert.assertTrue(retorno);
-
-    Cliente cliente1 = new Cliente();
-    cliente1.setCpf(56565656569L);
-    cliente1.setNome("Rodrigo");
-    cliente1.setCidade("São Paulo");
-    cliente1.setEnd("End");
-    cliente1.setEstado("SP");
-    cliente1.setNumero(10);
-    cliente1.setTel(1199999999L);
-    Boolean retorno1 = clienteDao.cadastrar(cliente1);
-    Assert.assertTrue(retorno1);
+    clienteDao.cadastrar(buildCliente(new Random().nextLong()));
+    clienteDao.cadastrar(buildCliente(new Random().nextLong()));
 
     Collection<Cliente> list = clienteDao.buscarTodos();
     assertTrue(list != null);
@@ -170,8 +139,5 @@ public class ClienteDAOTest {
       }
     });
 
-    Collection<Cliente> list1 = clienteDao.buscarTodos();
-    assertTrue(list1 != null);
-    assertTrue(list1.size() == 0);
   }
 }

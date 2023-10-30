@@ -18,7 +18,7 @@ public class EstoqueDAO extends Connectable {
       connection = ConnectionFactory.getConnection();
       stm =
         connection.prepareStatement(
-          "INSERT INTO estoque (produto_id, quantidade) VALUES (?, ?);"
+          "INSERT INTO tb_estoque (produto_id, quantidade) VALUES (?, ?);"
         );
       stm.setLong(1, produto.getId());
       stm.setInt(2, quantidade);
@@ -38,12 +38,12 @@ public class EstoqueDAO extends Connectable {
       connection = ConnectionFactory.getConnection();
       stm =
         connection.prepareStatement(
-          "SELECT * FROM estoque WHERE produto_id = ?;"
+          "SELECT * FROM tb_estoque WHERE produto_id = ?;"
         );
       stm.setLong(1, produto.getId());
       rs = stm.executeQuery();
       if (rs.next()) {
-        return rs.getInt(1);
+        return rs.getInt(3); // coluna 3 é quantidade
       }
     } catch (SQLException e) {
       throw new DAOException("ERRO RECUPERANDO QUANTIDADE DE ITENS ", e);

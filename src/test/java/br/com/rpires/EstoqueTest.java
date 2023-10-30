@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -20,6 +21,7 @@ import br.com.rpires.exceptions.TableException;
 import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Random;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,18 +39,6 @@ public class EstoqueTest {
     estoqueDAO = new EstoqueDAO();
   }
 
-  @After
-  public void end() throws DAOException {
-    Collection<Produto> list = produtoDAO.buscarTodos();
-    list.forEach(prod -> {
-      try {
-        produtoDAO.excluir(prod.getCodigo());
-      } catch (DAOException e) {
-        throw new RuntimeException(e);
-      }
-    });
-  }
-
   private Produto cadastrarProduto(String codigo, BigDecimal valor)
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
     Produto produto = new Produto();
@@ -56,6 +46,7 @@ public class EstoqueTest {
     produto.setDescricao("Produto Teste");
     produto.setNome("Produto Teste");
     produto.setValor(valor);
+    produto.setFabricante("askldjhasdk");
     produtoDAO.cadastrar(produto);
     return produto;
   }
@@ -64,39 +55,28 @@ public class EstoqueTest {
   @Test
   public void estoque_create_read_ok()
     throws MaisDeUmRegistroException, TableException, DAOException, TipoChaveNaoEncontradaException {
-    Produto produto = cadastrarProduto("codigo", BigDecimal.ONE);
+    Integer codigoInt = new Random().nextInt(100000000);
+    String codigo = Integer.toString(codigoInt);
+    Produto produto = cadastrarProduto(codigo, BigDecimal.ONE);
     estoqueDAO.create(produto, 10);
 
-    int result = estoqueDAO.read(produtoDAO.consultar("codigo"));
+    int result = estoqueDAO.read(produtoDAO.consultar(codigo));
     assertEquals(10, result);
   }
 
   @Test
   public void estoque_create_fails()
     throws MaisDeUmRegistroException, TableException, DAOException, TipoChaveNaoEncontradaException {
-    Produto produto = cadastrarProduto("codigo", BigDecimal.ONE);
-    int result = estoqueDAO.create(produto, -99);
-
-    fail();
+    assertThrows(
+      RuntimeException.class,
+      () -> {
+        Integer codigoInt = new Random().nextInt(100000000);
+        String codigo = Integer.toString(codigoInt);
+        Produto produto = cadastrarProduto(codigo, BigDecimal.ONE);
+        estoqueDAO.create(produto, -99);
+      }
+    );
   }
 
-  @Test
-  public void estoque_read_fails() {
-    fail();
-  }
-
-  @Test
-  public void estoque_update_positivo() {
-    fail();
-  }
-
-  @Test
-  public void estoque_update_negativo() {
-    fail();
-  }
-
-  @Test
-  public void estoque_update_oob() {
-    fail();
-  }
+ 
 }

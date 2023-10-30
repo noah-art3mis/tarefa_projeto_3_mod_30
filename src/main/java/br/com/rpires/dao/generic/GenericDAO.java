@@ -135,7 +135,7 @@ public abstract class GenericDAO<T extends Persistente, E extends Serializable> 
 		try {
 			stm = connection.prepareStatement(getQueryAtualizacao());
 			setParametrosQueryAtualizacao(stm, entity);
-			int rowsAffected = stm.executeUpdate();
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			throw new DAOException("ERRO ALTERANDO OBJETO ", e);
 		} finally {
