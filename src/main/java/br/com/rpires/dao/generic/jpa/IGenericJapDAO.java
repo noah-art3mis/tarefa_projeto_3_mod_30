@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.rpires.dao.jpa;
+package br.com.rpires.dao.generic.jpa;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
  *
  * Interface genérica para métodos de CRUD(Create, Read, Update and Delete)
  */
-public interface IGenericDAO <T extends Persistente, E extends Serializable> {
+public interface IGenericJapDAO <T extends Persistente, E extends Serializable> {
 
 	/**
      * Método para cadastrar novos registro no banco de dados

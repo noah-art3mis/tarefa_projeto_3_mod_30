@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.rpires.dao.jpa;
+package br.com.rpires.dao.generic.jpa;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -21,7 +21,7 @@ import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
  * @author rodrigo.pires
  *
  */
-public class GenericDAO <T extends Persistente, E extends Serializable> implements IGenericDAO <T,E> {
+public class GenericJpaDAO <T extends Persistente, E extends Serializable> implements IGenericJapDAO <T,E> {
 
 	protected EntityManagerFactory entityManagerFactory;
 	
@@ -29,7 +29,7 @@ public class GenericDAO <T extends Persistente, E extends Serializable> implemen
 	
 	private Class<T> persistenteClass;
 	
-	public GenericDAO(Class<T> persistenteClass) {
+	public GenericJpaDAO(Class<T> persistenteClass) {
 		this.persistenteClass = persistenteClass;
 	}
 	

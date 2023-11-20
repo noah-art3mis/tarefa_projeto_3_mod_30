@@ -19,7 +19,7 @@ import br.com.rpires.dao.Persistente;
  */
 @Entity
 @Table(name = "TB_CLIENTE")
-public class Cliente implements Persistente {
+public class ClienteJpa implements Persistente {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="cliente_seq")

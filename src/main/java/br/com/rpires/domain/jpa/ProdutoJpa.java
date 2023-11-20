@@ -21,7 +21,7 @@ import br.com.rpires.dao.Persistente;
  */
 @Entity
 @Table(name = "TB_PRODUTO")
-public class Produto implements Persistente {
+public class ProdutoJpa implements Persistente {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="prod_seq")

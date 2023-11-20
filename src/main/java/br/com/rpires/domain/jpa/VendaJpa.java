@@ -32,7 +32,7 @@ import br.com.rpires.dao.Persistente;
  */
 @Entity
 @Table(name = "TB_VENDA")
-public class Venda implements Persistente {
+public class VendaJpa implements Persistente {
 	
 	public enum Status {
 		INICIADA, CONCLUIDA, CANCELADA;
@@ -60,7 +60,7 @@ public class Venda implements Persistente {
 		foreignKey = @ForeignKey(name = "fk_venda_cliente"), 
 		referencedColumnName = "id", nullable = false
 	)
-	private Cliente cliente;
+	private ClienteJpa cliente;
 	
 	/*
 	 * OBS: Não é uma boa prática utiliar FetchType.EAGER pois ele sempre irá trazer todos os objetos da collection
@@ -69,7 +69,7 @@ public class Venda implements Persistente {
 	 * @see IVendaJpaDAO consultarComCollection
 	 */
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL/*, fetch = FetchType.EAGER*/)
-	private Set<ProdutoQuantidade> produtos;
+	private Set<ProdutoQuantidadeJpa> produtos;
 	
 	@Column(name = "VALOR_TOTAL", nullable = false)
 	private BigDecimal valorTotal;
@@ -81,7 +81,7 @@ public class Venda implements Persistente {
 	@Column(name = "STATUS_VENDA", nullable = false)
 	private Status status;
 	
-	public Venda() {
+	public VendaJpa() {
 		produtos = new HashSet<>();
 	}
 
@@ -93,28 +93,28 @@ public class Venda implements Persistente {
 		this.codigo = codigo;
 	}
 
-	public Cliente getCliente() {
+	public ClienteJpa getCliente() {
 		return cliente;
 	}
 
-	public void setCliente(Cliente cliente) {
+	public void setCliente(ClienteJpa cliente) {
 		this.cliente = cliente;
 	}
 
-	public Set<ProdutoQuantidade> getProdutos() {
+	public Set<ProdutoQuantidadeJpa> getProdutos() {
 		return produtos;
 	}
 
-	public void adicionarProduto(Produto produto, Integer quantidade) {
+	public void adicionarProduto(ProdutoJpa produto, Integer quantidade) {
 		validarStatus();
-		Optional<ProdutoQuantidade> op = 
+		Optional<ProdutoQuantidadeJpa> op = 
 				produtos.stream().filter(filter -> filter.getProduto().getCodigo().equals(produto.getCodigo())).findAny();
 		if (op.isPresent()) {
-			ProdutoQuantidade produtpQtd = op.get();
+			ProdutoQuantidadeJpa produtpQtd = op.get();
 			produtpQtd.adicionar(quantidade);
 		} else {
 			// Criar fabrica para criar ProdutoQuantidade
-			ProdutoQuantidade prod = new ProdutoQuantidade();
+			ProdutoQuantidadeJpa prod = new ProdutoQuantidadeJpa();
 			prod.setVenda(this);
 			prod.setProduto(produto);
 			prod.adicionar(quantidade);
@@ -129,13 +129,13 @@ public class Venda implements Persistente {
 		}
 	}
 	
-	public void removerProduto(Produto produto, Integer quantidade) {
+	public void removerProduto(ProdutoJpa produto, Integer quantidade) {
 		validarStatus();
-		Optional<ProdutoQuantidade> op = 
+		Optional<ProdutoQuantidadeJpa> op = 
 				produtos.stream().filter(filter -> filter.getProduto().getCodigo().equals(produto.getCodigo())).findAny();
 		
 		if (op.isPresent()) {
-			ProdutoQuantidade produtpQtd = op.get();
+			ProdutoQuantidadeJpa produtpQtd = op.get();
 			if (produtpQtd.getQuantidade()>quantidade) {
 				produtpQtd.remover(quantidade);
 				recalcularValorTotalVenda();
@@ -163,7 +163,7 @@ public class Venda implements Persistente {
 	public void recalcularValorTotalVenda() {
 		//validarStatus();
 		BigDecimal valorTotal = BigDecimal.ZERO;
-		for (ProdutoQuantidade prod : this.produtos) {
+		for (ProdutoQuantidadeJpa prod : this.produtos) {
 			valorTotal = valorTotal.add(prod.getValorTotal());
 		}
 		this.valorTotal = valorTotal;
@@ -201,7 +201,7 @@ public class Venda implements Persistente {
 		this.valorTotal = valorTotal;
 	}
 
-	public void setProdutos(Set<ProdutoQuantidade> produtos) {
+	public void setProdutos(Set<ProdutoQuantidadeJpa> produtos) {
 		this.produtos = produtos;
 	}
 	

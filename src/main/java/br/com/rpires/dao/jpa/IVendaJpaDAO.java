@@ -3,7 +3,8 @@
  */
 package br.com.rpires.dao.jpa;
 
-import br.com.rpires.domain.jpa.Venda;
+import br.com.rpires.dao.generic.jpa.IGenericJapDAO;
+import br.com.rpires.domain.jpa.VendaJpa;
 import br.com.rpires.exceptions.DAOException;
 import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
 
@@ -11,11 +12,11 @@ import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
  * @author rodrigo.pires
  *
  */
-public interface IVendaDAO extends IGenericDAO<Venda, Long>{
+public interface IVendaJpaDAO extends IGenericJapDAO<VendaJpa, Long>{
 
-	public void finalizarVenda(Venda venda) throws TipoChaveNaoEncontradaException, DAOException;
+	public void finalizarVenda(VendaJpa venda) throws TipoChaveNaoEncontradaException, DAOException;
 	
-	public void cancelarVenda(Venda venda) throws TipoChaveNaoEncontradaException, DAOException;
+	public void cancelarVenda(VendaJpa venda) throws TipoChaveNaoEncontradaException, DAOException;
 	
 	/**
 	 * Usando este método para evitar a exception org.hibernate.LazyInitializationException
@@ -26,10 +27,10 @@ public interface IVendaDAO extends IGenericDAO<Venda, Long>{
 	 * mesmo sem precisar utilizar.
 	 * 
 	 * 
-	 * @see Venda produtos
+	 * @see VendaJpa produtos
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public Venda consultarComCollection(Long id);
+	public VendaJpa consultarComCollection(Long id);
 }

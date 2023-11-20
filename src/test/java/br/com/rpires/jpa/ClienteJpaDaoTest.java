@@ -12,9 +12,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.com.rpires.dao.jpa.ClienteDAO;
-import br.com.rpires.dao.jpa.IClienteDAO;
-import br.com.rpires.domain.jpa.Cliente;
+import br.com.rpires.dao.jpa.ClienteJpaDAO;
+import br.com.rpires.dao.jpa.IClienteJpaDAO;
+import br.com.rpires.domain.jpa.ClienteJpa;
 import br.com.rpires.exceptions.DAOException;
 import br.com.rpires.exceptions.MaisDeUmRegistroException;
 import br.com.rpires.exceptions.TableException;
@@ -26,18 +26,18 @@ import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
  */
 public class ClienteJpaDaoTest {
 	
-	private IClienteDAO clienteDao;
+	private IClienteJpaDAO clienteDao;
 	
 	private Random rd;
 	
 	public ClienteJpaDaoTest() {
-		this.clienteDao = new ClienteDAO();
+		this.clienteDao = new ClienteJpaDAO();
 		rd = new Random();
 	}
 	
 	@After
 	public void end() throws DAOException {
-		Collection<Cliente> list = clienteDao.buscarTodos();
+		Collection<ClienteJpa> list = clienteDao.buscarTodos();
 		list.forEach(cli -> {
 			try {
 				clienteDao.excluir(cli);
@@ -50,36 +50,36 @@ public class ClienteJpaDaoTest {
 	
 	@Test
 	public void pesquisarCliente() throws TipoChaveNaoEncontradaException, DAOException, MaisDeUmRegistroException, TableException {
-		Cliente cliente = criarCliente();
+		ClienteJpa cliente = criarCliente();
 		clienteDao.cadastrar(cliente);
 		
-		Cliente clienteConsultado = clienteDao.consultar(cliente.getId());
+		ClienteJpa clienteConsultado = clienteDao.consultar(cliente.getId());
 		Assert.assertNotNull(clienteConsultado);
 		
 	}
 
 	@Test
 	public void salvarCliente() throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-		Cliente cliente = criarCliente();
-		Cliente retorno = clienteDao.cadastrar(cliente);
+		ClienteJpa cliente = criarCliente();
+		ClienteJpa retorno = clienteDao.cadastrar(cliente);
 		Assert.assertNotNull(retorno);
 		
-		Cliente clienteConsultado = clienteDao.consultar(retorno.getId());
+		ClienteJpa clienteConsultado = clienteDao.consultar(retorno.getId());
 		Assert.assertNotNull(clienteConsultado);
 		
 		clienteDao.excluir(cliente);
 		
-		Cliente clienteConsultado1 = clienteDao.consultar(retorno.getId());
+		ClienteJpa clienteConsultado1 = clienteDao.consultar(retorno.getId());
 		Assert.assertNull(clienteConsultado1);
 	}
 	
 	@Test
 	public void excluirCliente() throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-		Cliente cliente = criarCliente();
-		Cliente retorno = clienteDao.cadastrar(cliente);
+		ClienteJpa cliente = criarCliente();
+		ClienteJpa retorno = clienteDao.cadastrar(cliente);
 		Assert.assertNotNull(retorno);
 		
-		Cliente clienteConsultado = clienteDao.consultar(cliente.getId());
+		ClienteJpa clienteConsultado = clienteDao.consultar(cliente.getId());
 		Assert.assertNotNull(clienteConsultado);
 		
 		clienteDao.excluir(cliente);
@@ -89,17 +89,17 @@ public class ClienteJpaDaoTest {
 	
 	@Test
 	public void alterarCliente() throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-		Cliente cliente = criarCliente();
-		Cliente retorno = clienteDao.cadastrar(cliente);
+		ClienteJpa cliente = criarCliente();
+		ClienteJpa retorno = clienteDao.cadastrar(cliente);
 		Assert.assertNotNull(retorno);
 		
-		Cliente clienteConsultado = clienteDao.consultar(cliente.getId());
+		ClienteJpa clienteConsultado = clienteDao.consultar(cliente.getId());
 		Assert.assertNotNull(clienteConsultado);
 		
 		clienteConsultado.setNome("Rodrigo Pires");
 		clienteDao.alterar(clienteConsultado);
 		
-		Cliente clienteAlterado = clienteDao.consultar(clienteConsultado.getId());
+		ClienteJpa clienteAlterado = clienteDao.consultar(clienteConsultado.getId());
 		Assert.assertNotNull(clienteAlterado);
 		Assert.assertEquals("Rodrigo Pires", clienteAlterado.getNome());
 		
@@ -110,15 +110,15 @@ public class ClienteJpaDaoTest {
 	
 	@Test
 	public void buscarTodos() throws TipoChaveNaoEncontradaException, DAOException {
-		Cliente cliente = criarCliente();
-		Cliente retorno = clienteDao.cadastrar(cliente);
+		ClienteJpa cliente = criarCliente();
+		ClienteJpa retorno = clienteDao.cadastrar(cliente);
 		Assert.assertNotNull(retorno);
 		
-		Cliente cliente1 = criarCliente();
-		Cliente retorno1 = clienteDao.cadastrar(cliente1);
+		ClienteJpa cliente1 = criarCliente();
+		ClienteJpa retorno1 = clienteDao.cadastrar(cliente1);
 		Assert.assertNotNull(retorno1);
 		
-		Collection<Cliente> list = clienteDao.buscarTodos();
+		Collection<ClienteJpa> list = clienteDao.buscarTodos();
 		assertTrue(list != null);
 		assertTrue(list.size() == 2);
 		
@@ -131,13 +131,13 @@ public class ClienteJpaDaoTest {
 			}
 		});
 		
-		Collection<Cliente> list1 = clienteDao.buscarTodos();
+		Collection<ClienteJpa> list1 = clienteDao.buscarTodos();
 		assertTrue(list1 != null);
 		assertTrue(list1.size() == 0);
 	}
 	
-	private Cliente criarCliente() {
-		Cliente cliente = new Cliente();
+	private ClienteJpa criarCliente() {
+		ClienteJpa cliente = new ClienteJpa();
 		cliente.setCpf(rd.nextLong());
 		cliente.setNome("Rodrigo");
 		cliente.setCidade("São Paulo");
