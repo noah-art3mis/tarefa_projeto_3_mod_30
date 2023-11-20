@@ -5,16 +5,15 @@ package br.com.rpires;
 
 import static org.junit.Assert.assertTrue;
 
-import br.com.rpires.dao.ClienteDAO;
-import br.com.rpires.dao.IClienteDAO;
-import br.com.rpires.domain.Cliente;
+import br.com.rpires.dao.jpa.ClienteDAO;
+import br.com.rpires.dao.jpa.IClienteDAO;
+import br.com.rpires.domain.jpa.Cliente;
 import br.com.rpires.exceptions.DAOException;
 import br.com.rpires.exceptions.MaisDeUmRegistroException;
 import br.com.rpires.exceptions.TableException;
 import br.com.rpires.exceptions.TipoChaveNaoEncontradaException;
 import java.util.Collection;
 import java.util.Random;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class ClienteDAOTest {
     });
   }
 
-  private Cliente buildCliente(Long randomCpf) {
+  private buildCliente(Long randomCpf) {
     Cliente cliente = new Cliente();
     cliente.setCpf(randomCpf);
     cliente.setNome("Rodrigo");
@@ -72,11 +71,11 @@ public class ClienteDAOTest {
   @Test
   public void salvarCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = buildCliente(new Random().nextLong());
+    ClienteJpacliente = buildCliente(new Random().nextLong());
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
-    Cliente clienteConsultado = clienteDao.consultar(cliente.getCpf());
+    ClienteJpaclienteConsultado = clienteDao.consultar(cliente.getCpf());
     Assert.assertNotNull(clienteConsultado);
 
     clienteDao.excluir(cliente.getCpf());
@@ -85,11 +84,11 @@ public class ClienteDAOTest {
   @Test
   public void excluirCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = buildCliente(new Random().nextLong());
+    Cliente = buildCliente(new Random().nextLong());
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
-    Cliente clienteConsultado = clienteDao.consultar(cliente.getCpf());
+    ClienteJpaclienteConsultado = clienteDao.consultar(cliente.getCpf());
     Assert.assertNotNull(clienteConsultado);
 
     clienteDao.excluir(cliente.getCpf());
@@ -100,18 +99,19 @@ public class ClienteDAOTest {
   @Test
   public void alterarCliente()
     throws TipoChaveNaoEncontradaException, MaisDeUmRegistroException, TableException, DAOException {
-    Cliente cliente = buildCliente(new Random().nextLong());
+    ClienteJpacliente = buildCliente(new Random().nextLong());
 
     Boolean retorno = clienteDao.cadastrar(cliente);
     Assert.assertTrue(retorno);
 
-    Cliente clienteConsultado = clienteDao.consultar(cliente.getCpf());
+    ClienteJpaclienteConsultado = clienteDao.consultar(cliente.getCpf());
     Assert.assertNotNull(clienteConsultado);
 
     clienteConsultado.setNome("Rodrigo Pires");
     clienteDao.alterar(clienteConsultado);
 
-    Cliente clienteAlterado = clienteDao.consultar(clienteConsultado.getCpf());
+    ClienteJpaclienteAlterado =
+      clienteDao.consultar(clienteConsultado.getCpf());
     Assert.assertNotNull(clienteAlterado);
     Assert.assertEquals("Rodrigo Pires", clienteAlterado.getNome());
 
@@ -138,6 +138,5 @@ public class ClienteDAOTest {
         e.printStackTrace();
       }
     });
-
   }
 }
